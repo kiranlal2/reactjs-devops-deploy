@@ -1,34 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
+import MainLayout from './layouts/MainLayout'
+
+const Home = lazy(() => import('./pages/Home'))
+const Products = lazy(() => import('./pages/Products'))
+const ProductDetails = lazy(() => import('./pages/ProductDetails'))
+const Category = lazy(() => import('./pages/Category'))
+const Cart = lazy(() => import('./pages/Cart'))
+const Checkout = lazy(() => import('./pages/Checkout'))
+const Stock = lazy(() => import('./pages/Stock'))
+const StockDetails = lazy(() => import('./pages/StockDetails'))
+const About = lazy(() => import('./pages/About'))
+const Contact = lazy(() => import('./pages/Contact'))
+const Notfound = lazy(() => import('./pages/NotFound'))
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <BrowserRouter>
+      <Suspense fallback={<div className="flex items-center justify-center h-screen text-xl font-semibold">Loading...</div>}>
+        <Routes>
+          <Route element={<MainLayout />}>
+            <Route path='/' element={<Home />} />
+            <Route path='products' element={<Products />} />
+            <Route path='category' element={<Category />} />
+            <Route path='products/:id' element={<ProductDetails />} />
+            <Route path='cart' element={<Cart />} />
+            <Route path='checkout' element={<Checkout />} />
+            <Route path='stock' element={<Stock />} />
+            <Route path='stock/:id' element={<StockDetails />} />
+            <Route path='/about' element={<About />} />
+            <Route path='/contact' element={<Contact />} />
+          </Route>
+          <Route path='*' element={<Notfound />} />
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
   )
 }
 
