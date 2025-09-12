@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: react-devops-deploy-container
-          image: <dockerhub-username>/react-devops-deploy:latest
+          image: <DOCKER_HUB_USERNAME>/react-devops-deploy:latest
           ports:
             - containerPort: 80
           resources:

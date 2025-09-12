@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "reactjs-devops-deploy"
-        DOCKER_HUB = "kiranlal369"
+        DOCKER_HUB_USERNAME = "kiranlal369"
     }
     
     stages {
@@ -20,7 +20,7 @@ pipeline {
                                                      usernameVariable: 'DOCKER_USER', 
                                                      passwordVariable: 'DOCKER_PASS')]) {
                         sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-                        sh "docker build -t $DOCKER_HUB/$IMAGE_NAME:latest ."
+                        sh "docker build -t $DOCKER_HUB_USERNAME/$IMAGE_NAME:latest ."
                     }
                 }
             }
@@ -29,7 +29,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    sh "docker push $DOCKER_HUB/$IMAGE_NAME:latest"
+                    sh "docker push $DOCKER_HUB_USERNAME/$IMAGE_NAME:latest"
                 }
             }
         }
