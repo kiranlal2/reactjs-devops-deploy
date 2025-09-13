@@ -4,8 +4,9 @@ metadata:
   name: react-service
 spec:
   selector:
-    name: react-devops-deploy
+    app: react-devops-deploy
   ports:
     - protocol: TCP
       port: 80
       targetPort: 80
+  type: LoadBalancer

@@ -16,20 +16,27 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub_cred', 
-                                                     usernameVariable: 'DOCKER_USER', 
-                                                     passwordVariable: 'DOCKER_PASS')]) {
-                        sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-                        sh "docker build -t $DOCKER_HUB_USERNAME/$IMAGE_NAME:latest ."
+                    sh "docker build -t $DOCKER_HUB_USERNAME/$IMAGE_NAME:latest ."
                     }
                 }
             }
         }
 
-        stage('Push Docker Image') {
+        stage('Push Docker Image to dockerhub') {
             steps {
                 script {
-                    sh "docker push $DOCKER_HUB_USERNAME/$IMAGE_NAME:latest"
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub_cred', 
+                                                     usernameVariable: 'DOCKER_USER', 
+                                                     passwordVariable: 'DOCKER_PASS')]) {
+                        sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                        sh "docker push $DOCKER_HUB_USERNAME/$IMAGE_NAME:latest"
+                }
+            }
+        }
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    sh "kubectl set image deployment/reactjs-deploy reactjs-deploy=$DOCKER_HUB_USERNAME/$IMAGE_NAME:latest --record"
                 }
             }
         }

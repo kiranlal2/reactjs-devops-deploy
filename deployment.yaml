@@ -6,7 +6,7 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      name: react-devops-deploy
+      app: react-devops-deploy
   template:
     metadata:
       labels:
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: react-devops-deploy-container
-          image: <DOCKER_HUB_USERNAME>/react-devops-deploy:latest
+          image: kiranlal369/react-devops-deploy:latest
           ports:
             - containerPort: 80
           resources:
