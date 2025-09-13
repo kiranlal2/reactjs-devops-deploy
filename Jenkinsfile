@@ -37,14 +37,13 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    // First apply the manifests (only needed first time or when you change YAML)
-                    sh "kubectl apply -f deployment.yaml"
-                    sh "kubectl apply -f service.yaml"
+                    // Apply everything inside k8s folder
+                    sh "kubectl apply -f k8s/"
 
-                    // Then update image (for rolling updates)
+                    // Update image with rolling deployment
                     sh "kubectl set image deployment/react-devops-deploy react-devops-deploy-container=$DOCKER_HUB_USERNAME/$IMAGE_NAME:latest --record"
 
-                    // Check rollout status
+                    // Verify rollout
                     sh "kubectl rollout status deployment/react-devops-deploy"
                 }
             }
